@@ -20,24 +20,35 @@
 typedef seqan::CharString cs;
 typedef seqan::Dna5String ds;
 typedef std::map<cs,ds> Tdbcontainer;
+typedef Tdbcontainer::const_iterator MapIterator;
 
-using namespace seqan;
+Tdbcontainer ReadFastaSetDb(std::string const &filepath){
+    seqan::StringSet<seqan::CharString> ids;
+    seqan::StringSet<seqan::Dna5String> seqs;
+    const char * dbname = filepath.c_str();
+    seqan::SequenceStream seqIO(dbname);
+    readAll(ids,seqs,seqIO);
+    Tdbcontainer dbcontainer;
+    for(unsigned i = 0; i< length(seqs); i++)
+    {
+        dbcontainer[ids[i]] = seqs[i];
+    }
+    return dbcontainer;
+}
+
+void printdb(Tdbcontainer const & container){
+    for(MapIterator iter = container.begin(); iter != container.end(); iter++)
+        std::cout << iter->first << " " << iter->second << std::endl;
+}
+
 bool parseDatabase(DatabasePaths const &db_paths){
+    Tdbcontainer VGeneDB = ReadFastaSetDb(db_paths.Vgene_db);
+    Tdbcontainer DGeneDB = ReadFastaSetDb(db_paths.Dgene_db);
+    Tdbcontainer JGeneDB = ReadFastaSetDb(db_paths.Jgene_db);
     
-        seqan::StringSet<seqan::CharString> ids;
-        seqan::StringSet<seqan::Dna5String> seqs;
+    printdb(VGeneDB);
+    printdb(DGeneDB);
+    printdb(JGeneDB);
     
-        //Sequence Stream Takes a const pointe char
-        const char * c = db_paths.Vgene_db.c_str();
-        seqan::SequenceStream seqIO(c);
-        readAll(ids, seqs, seqIO);
-    
-    
-        Tdbcontainer VGeneDB;
-        for(unsigned i = 0; i< length(seqs); i++)
-        {
-            std::cout << ids[i] << "\t" << seqs[i] << "\n\n\n";
-        }
-    
-        return 1;
+return 1;
 }
