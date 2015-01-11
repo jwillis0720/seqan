@@ -35,7 +35,7 @@
 #include <seqan/basic.h>
 #include <seqan/sequence.h>
 #include <seqan/arg_parse.h>
-#include "DatabaseIO.h"
+#include "DatabaseHandler.h"
 #include "SeqIg.h"
 #include "StructDefs.h"
 
@@ -103,12 +103,15 @@ int main(int argc, char const ** argv)
     if (res != seqan::ArgumentParser::PARSE_OK)
         return res == seqan::ArgumentParser::PARSE_ERROR;
     
-    setDatabaseFastas(options, dbpaths);
     
-    bool rtd = parseDatabase(dbpaths);
-        if(!rtd){
-            std::cerr << "Fatal Error: Problem with database " << options.database_path << "\n";
-            return 1;
-        }
+    setDatabaseFastas(options, dbpaths);
+    DatabaseHandler VGeneDB = DatabaseHandler(dbpaths.Vgene_db);
+    VGeneDB.print_pretty();
+    
+//    bool rtd = parseDatabase(dbpaths);
+//        if(!rtd){
+//            std::cerr << "Fatal Error: Problem with database " << options.database_path << "\n";
+//            return 1;
+//        }
     return 0;
 }

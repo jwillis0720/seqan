@@ -34,8 +34,8 @@ add_executable (
 SeqIg
 SeqIg.h
 SeqIg.cpp
-DatabaseIO.cpp
-DatabaseIO.h
+DatabaseHandler.cpp
+DatabaseHandler.h
 StructDefs.h
 )
 
