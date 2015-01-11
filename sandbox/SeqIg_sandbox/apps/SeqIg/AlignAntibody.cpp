@@ -8,7 +8,7 @@
 
 #include "AlignAntibody.h"
 
-AlignAntibody::AlignAntibody(seqan::Dna5String const & seq, seqan::CharString const & id, seqan::StringSet<seqan::Dna5String> const & allseqs){
+AlignAntibody::AlignAntibody(seqan::Dna5String const & seq, seqan::CharString const & id, DatabaseHandler const & dbhandler){
     current_seq = seq;
     current_id = id;
 };

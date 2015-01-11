@@ -213,7 +213,7 @@ int main(int argc, char const ** argv)
             return false;
         }
         
-        AlignAntibody(id, seq, VGeneDB.getallseqs());
+        AlignAntibody(id, seq, VGeneDB);
     }
 
     

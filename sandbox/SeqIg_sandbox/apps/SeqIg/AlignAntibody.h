@@ -17,9 +17,8 @@ class AlignAntibody {
     private:
         seqan::Dna5String current_seq;
         seqan::CharString current_id;
-        seqan::StringSet<seqan::Dna5String> allseqs;
     public:
-    AlignAntibody(seqan::Dna5String const & , seqan::CharString const &, seqan::StringSet<seqan::Dna5String> const &);
+        AlignAntibody(seqan::Dna5String const & , seqan::CharString const &, DatabaseHandler const &);
 };
 
 #endif /* defined(__seqan_sandbox__AlignAntibody__) */
