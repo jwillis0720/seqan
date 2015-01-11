@@ -31,6 +31,7 @@ class DatabaseHandler {
         DatabaseHandler(std::string const &);
         void open();
         void print_pretty();
+        seqan::StringSet<seqan::Dna5String> getallseqs();
 };
 
 

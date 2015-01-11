@@ -40,3 +40,7 @@ void DatabaseHandler::print_pretty(){
         std::cout << dbiter->first << " -> " << dbiter->second << std::endl;
 }
 
+seqan::StringSet<seqan::Dna5String> DatabaseHandler::getallseqs(){
+    return seqs;
+};
+

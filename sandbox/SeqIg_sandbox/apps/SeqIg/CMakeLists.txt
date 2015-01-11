@@ -37,6 +37,8 @@ SeqIg.cpp
 DatabaseHandler.cpp
 DatabaseHandler.h
 StructDefs.h
+AlignAntibody.h
+AlignAntibody.cpp
 )
 
 # Add dependencies found by find_package (SeqAn).

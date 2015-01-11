@@ -39,6 +39,7 @@
 #include "DatabaseHandler.h"
 #include "SeqIg.h"
 #include "StructDefs.h"
+#include "AlignAntibody.h"
 
 inline bool check_if_dir_exists (const std::string &name) {
     struct stat buffer;
@@ -212,7 +213,7 @@ int main(int argc, char const ** argv)
             return false;
         }
         
-        std::cout << id << '\t' << seq << '\t' << '\n';
+        AlignAntibody(id, seq, VGeneDB.getallseqs());
     }
 
     
