@@ -40,6 +40,7 @@ struct SeqIgOptions
     std::string chain;
     std::string receptor;
     std::string species;
+    std::string input_file;
     bool verbose;
 };
 

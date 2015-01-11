@@ -33,6 +33,7 @@
 // ==========================================================================
 
 #include <seqan/basic.h>
+#include <seqan/seq_io.h>
 #include <seqan/sequence.h>
 #include <seqan/arg_parse.h>
 #include "DatabaseHandler.h"
@@ -43,9 +44,6 @@ inline bool check_if_dir_exists (const std::string &name) {
     struct stat buffer;
     return (stat (name.c_str(), &buffer) == 0);
 }
-
-
-
 
 void setUpArgumentParser(seqan::ArgumentParser & parser) {
     setAppName(parser, "SeqIg");
@@ -98,6 +96,9 @@ seqan::ArgumentParser::ParseResult extractOptions(seqan::ArgumentParser const & 
     //bool options
     options.verbose = isSet(parser,"verbose");
     
+    //getinput options
+    bool rfn = getOptionValue(options.input_file,parser,"input_file");
+    
     if(!check_if_dir_exists(options.database_path)){
         std::cerr << "\n Can't find database path " << options.database_path << std::endl;
         return seqan::ArgumentParser::PARSE_ERROR;
@@ -105,6 +106,11 @@ seqan::ArgumentParser::ParseResult extractOptions(seqan::ArgumentParser const & 
     
     if(!rdp || !rr || !rc || !rs){
         std::cerr << "\n Problem loading databases" << std::endl;
+        return seqan::ArgumentParser::PARSE_ERROR;
+    }
+    
+    if(!rfn){
+        std::cerr << "\n Problem with input file" << std::endl;
         return seqan::ArgumentParser::PARSE_ERROR;
     }
     
@@ -186,6 +192,29 @@ int main(int argc, char const ** argv)
             return 1;
         }
     }
+    
+    const char * input_file = options.input_file.c_str();
+    seqan::CharString id;
+    seqan::Dna5String seq;
+    seqan::SequenceStream seqStream(input_file);
+    
+    if (!isGood(seqStream))
+    {
+        std::cerr << "ERROR: Could not open the file " << input_file << "\n";
+        return false;
+    }
+    
+    while (!atEnd(seqStream))
+    {
+        if (readRecord(id, seq, seqStream) != 0)
+        {
+            std::cerr << "ERROR: Could not read from " << input_file << "\n";
+            return false;
+        }
+        
+        std::cout << id << '\t' << seq << '\t' << '\n';
+    }
+
     
     return 0;
 }
