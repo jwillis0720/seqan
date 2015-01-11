@@ -11,16 +11,23 @@
 #include "DatabaseHandler.h"
 #include "StructDefs.h"
 
+
 DatabaseHandler::DatabaseHandler(std::string const &Databasename){
-    
-    //dbname must be c_string for SeqIO
     dbname = Databasename.c_str();
+}
+
+void DatabaseHandler::open(){
     
     //Sequence Stream constructor with c_string defined in .h
     seqan::SequenceStream SeqIO(dbname);
     
     //readall sets ids and seqs that were init in .h
-    seqan::readAll(ids,seqs,SeqIO);
+    rresult = seqan::readAll(ids,seqs,SeqIO);
+    
+    if (rresult != 0)
+    {
+        throw DatabaseHandlerExceptions("Can't Read FASTA File " + std::string(dbname) + "\n");  // Could not read file.
+    }
     
     //Then we set a map called dbcontainer to have all our shit
     for(unsigned i= 0;i< length(seqs);i++){

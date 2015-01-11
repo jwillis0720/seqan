@@ -29,7 +29,7 @@
 // DAMAGE.
 //
 // ==========================================================================
-// Author: Your Name <your.email@example.net>
+// Author: Your Name jwillis0720@gmail.com>
 // ==========================================================================
 
 #include <seqan/basic.h>
@@ -39,41 +39,76 @@
 #include "SeqIg.h"
 #include "StructDefs.h"
 
+inline bool check_if_dir_exists (const std::string &name) {
+    struct stat buffer;
+    return (stat (name.c_str(), &buffer) == 0);
+}
+
+
+
+
 void setUpArgumentParser(seqan::ArgumentParser & parser) {
     setAppName(parser, "SeqIg");
     setShortDescription(parser, "SeqIg - Immunoglobulin Germline Gene Assignment");
     setCategory(parser, "Database Locations");
     setDate(parser, "December 2014");
     
+    
     //Database Options
+    addSection(parser, "Sample Options");
     addOption(parser, seqan::ArgParseOption("d","database_path",
-                                            "The database path", seqan::ArgParseArgument::STRING));
+                                            "The database path", seqan::ArgParseOption::STRING));
     addOption(parser, seqan::ArgParseOption("r","receptor",
-                                            "The receptor type", seqan::ArgParseArgument::STRING));
+                                            "The receptor type", seqan::ArgParseOption::STRING));
     addOption(parser, seqan::ArgParseOption("c","chain",
-                                            "The chain type", seqan::ArgParseArgument::STRING));
+                                            "The chain type", seqan::ArgParseOption::STRING));
     addOption(parser, seqan::ArgParseOption("s","species",
-                                            "The species type", seqan::ArgParseArgument::STRING));
+                                            "The species type", seqan::ArgParseOption::STRING));
+    
+    addSection(parser, "Other Options");
+    addOption(parser, seqan::ArgParseOption("v","verbose","Verbose Output"));
+    
+    addSection(parser, "Input Options");
+    addOption(parser, seqan::ArgParseOption("f","input_file",
+                                            "The input file to be considered",seqan::ArgParseOption::INPUTFILE));
+    //Set Valid Values
+    setValidValues(parser, "receptor", "Ig TCR");
+    setValidValues(parser, "chain", "heavy lambda kappa");
+    setValidValues(parser, "species", "human mouse rat llama rhesus");
+    
+    //Set required - This should be an argument, but working with all options is so much easier, and I'm a madman
+    setRequired(parser, "f");
     
     //Set Database Default Values
     setDefaultValue(parser, "database_path","/Users/jordanwillis/Git_repos/pyig/data_dir");
-    setDefaultValue(parser, "receptor","Ig");
-    setDefaultValue(parser, "chain","heavy");
-    setDefaultValue(parser, "species","human");
-    
+    setDefaultValue(parser, "receptor", "Ig");
+    setDefaultValue(parser, "chain", "heavy");
+    setDefaultValue(parser, "species", "human");
 }
 
               
 seqan::ArgumentParser::ParseResult extractOptions(seqan::ArgumentParser const & parser, SeqIgOptions & options) {
-    bool stop = false;
     
     //getOptionvalue sets structure in place
-    getOptionValue(options.database_path, parser, "database_path");
-    getOptionValue(options.receptor,parser, "receptor");
-    getOptionValue(options.chain, parser, "chain");
-    getOptionValue(options.species, parser, "species");
+    bool rdp = getOptionValue(options.database_path, parser, "database_path");
+    bool rr = getOptionValue(options.receptor,parser, "receptor");
+    bool rc = getOptionValue(options.chain, parser, "chain");
+    bool rs = getOptionValue(options.species, parser, "species");
     
-    return (stop) ? seqan::ArgumentParser::PARSE_ERROR : seqan::ArgumentParser::PARSE_OK;
+    //bool options
+    options.verbose = isSet(parser,"verbose");
+    
+    if(!check_if_dir_exists(options.database_path)){
+        std::cerr << "\n Can't find database path " << options.database_path << std::endl;
+        return seqan::ArgumentParser::PARSE_ERROR;
+    }
+    
+    if(!rdp || !rr || !rc || !rs){
+        std::cerr << "\n Problem loading databases" << std::endl;
+        return seqan::ArgumentParser::PARSE_ERROR;
+    }
+    
+    return seqan::ArgumentParser::PARSE_OK;
 }
 
 
@@ -86,32 +121,71 @@ void setDatabaseFastas(SeqIgOptions const &options, DatabasePaths &dbpaths){
 
 int main(int argc, char const ** argv)
 {
-    // Parse the command line.
-    seqan::ArgumentParser parser;
     
     //structs
     SeqIgOptions options;
     DatabasePaths dbpaths;
     
     
+    // Parse the command line.
+    seqan::ArgumentParser parser;
     setUpArgumentParser(parser);
-    seqan::ArgumentParser::ParseResult res = parse(parser, argc, argv);
-    if (res != seqan::ArgumentParser::PARSE_OK)
-        return res == seqan::ArgumentParser::PARSE_ERROR;
+    parse(parser, argc, argv);
+    seqan::ArgumentParser::ParseResult res = extractOptions(parser, options);
     
-    res = extractOptions(parser, options);
+    //check that the parser didn't blow it
     if (res != seqan::ArgumentParser::PARSE_OK)
-        return res == seqan::ArgumentParser::PARSE_ERROR;
-    
+    {
+        std::cerr << "\n Problem parsing arguments \n" << std::endl;
+        return 1;
+    }
     
     setDatabaseFastas(options, dbpaths);
-    DatabaseHandler VGeneDB = DatabaseHandler(dbpaths.Vgene_db);
-    VGeneDB.print_pretty();
+    DatabaseHandler VGeneDB(dbpaths.Vgene_db);
+    DatabaseHandler JGeneDB(dbpaths.Jgene_db);
     
-//    bool rtd = parseDatabase(dbpaths);
-//        if(!rtd){
-//            std::cerr << "Fatal Error: Problem with database " << options.database_path << "\n";
-//            return 1;
-//        }
+    try {
+        VGeneDB.open();
+        if(options.verbose)
+        {
+            std::cout << "Loading DB at -> " << dbpaths.Vgene_db << std::endl;
+            VGeneDB.print_pretty();
+        }
+    }catch(DatabaseHandlerExceptions &msg){
+            std::cerr << "Couldn't open Database" << std::endl;
+            std::cerr << msg.what();
+            return 1;
+    }
+    
+    try {
+        JGeneDB.open();
+        if(options.verbose)
+        {
+            std::cout << "Loading DB at -> " << dbpaths.Jgene_db << std::endl;
+            JGeneDB.print_pretty();
+        }
+    }catch(DatabaseHandlerExceptions &msg){
+        std::cerr << "Couldn't open Database" << std::endl;
+        std::cerr << msg.what();
+        return 1;
+    }
+
+    if(options.chain == "heavy")
+    {
+        DatabaseHandler DGeneDB(dbpaths.Dgene_db);
+        try {
+            DGeneDB.open();
+            if(options.verbose)
+            {
+                std::cout << "Loading DB at -> " << dbpaths.Dgene_db << std::endl;
+                DGeneDB.print_pretty();
+            }
+        }catch(DatabaseHandlerExceptions &msg) {
+            std::cerr << "Couldn't open Database" << std::endl;
+            std::cerr << msg.what();
+            return 1;
+        }
+    }
+    
     return 0;
 }

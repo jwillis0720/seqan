@@ -40,6 +40,7 @@ struct SeqIgOptions
     std::string chain;
     std::string receptor;
     std::string species;
+    bool verbose;
 };
 
 struct DatabasePaths

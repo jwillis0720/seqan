@@ -26,10 +26,22 @@ class DatabaseHandler {
         seqan::StringSet<seqan::CharString> ids;
         seqan::StringSet<seqan::Dna5String> seqs;
         Tdbcontainer dbcontainer;
+        int rresult;
     public:
         DatabaseHandler(std::string const &);
+        void open();
         void print_pretty();
 };
 
+
+class DatabaseHandlerExceptions : public std::exception {
+    private:
+    std::string err_msg;
+    
+    public:
+    DatabaseHandlerExceptions(const std::string msg) : err_msg(msg) {};
+        ~DatabaseHandlerExceptions() throw() {};
+        const char *what() const throw() { return this->err_msg.c_str(); };
+};
 
 #endif /* defined(__seqan_sandbox__DatabaseHandler__) */
