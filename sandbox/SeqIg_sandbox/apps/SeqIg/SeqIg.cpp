@@ -199,6 +199,10 @@ int main(int argc, char const ** argv)
     seqan::Dna5String seq;
     seqan::SequenceStream seqStream(input_file);
     
+    
+    ///Containers i.e.maps
+    Tdbcontainer VGeneContainer = VGeneDB.GetDbContainer();
+    
     if (!isGood(seqStream))
     {
         std::cerr << "ERROR: Could not open the file " << input_file << "\n";
@@ -213,7 +217,7 @@ int main(int argc, char const ** argv)
             return false;
         }
         
-        AlignAntibody(id, seq, VGeneDB);
+        AlignAntibody VGeneAlign(id, seq, VGeneContainer, options.verbose);
     }
 
     

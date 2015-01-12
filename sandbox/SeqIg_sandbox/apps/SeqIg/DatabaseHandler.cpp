@@ -44,3 +44,6 @@ seqan::StringSet<seqan::Dna5String> DatabaseHandler::getallseqs(){
     return seqs;
 };
 
+Tdbcontainer DatabaseHandler::GetDbContainer(){
+    return dbcontainer;
+}

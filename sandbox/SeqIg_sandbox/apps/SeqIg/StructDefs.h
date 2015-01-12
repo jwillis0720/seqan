@@ -34,6 +34,11 @@
 
 #ifndef SANDBOX_SEQIG_SANDBOX_APPS_SEQIG_STRUCTDEFS_H_
 #define SANDBOX_SEQIG_SANDBOX_APPS_SEQIG_STRUCTDEFS_H_
+typedef seqan::CharString cs;
+typedef seqan::Dna5String ds;
+typedef std::map<cs,ds> Tdbcontainer;
+typedef Tdbcontainer::const_iterator MapIterator;
+
 struct SeqIgOptions
 {
     std::string database_path;

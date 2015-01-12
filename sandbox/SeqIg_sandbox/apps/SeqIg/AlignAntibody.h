@@ -12,13 +12,25 @@
 #include <stdio.h>
 #include <seqan/sequence.h>
 #include "DatabaseHandler.h"
+#include <seqan/align.h>
 
-class AlignAntibody {
+class AlignAntibody
+{
     private:
         seqan::Dna5String current_seq;
         seqan::CharString current_id;
+        seqan::CharString best_gene;
+        Tdbcontainer current_container;
+        bool _verbose;
+        void DoPairWiseLocalAgainstDb(seqan::CharString const &, seqan::Dna5String const &);
+        int top_score = -1000;
+        seqan::Align<seqan::Dna5String,seqan::ArrayGaps> best_align;
+
     public:
-        AlignAntibody(seqan::Dna5String const & , seqan::CharString const &, DatabaseHandler const &);
+        AlignAntibody(seqan::CharString const &,
+                      seqan::Dna5String const &,
+                      Tdbcontainer const &,
+                      bool const &);
 };
 
 #endif /* defined(__seqan_sandbox__AlignAntibody__) */

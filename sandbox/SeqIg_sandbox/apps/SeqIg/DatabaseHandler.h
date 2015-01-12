@@ -14,12 +14,6 @@
 #include "SeqIg.h"
 #include "StructDefs.h"
 
-
-typedef seqan::CharString cs;
-typedef seqan::Dna5String ds;
-typedef std::map<cs,ds> Tdbcontainer;
-typedef Tdbcontainer::const_iterator MapIterator;
-
 class DatabaseHandler {
     private :
         const char * dbname;
@@ -32,15 +26,16 @@ class DatabaseHandler {
         void open();
         void print_pretty();
         seqan::StringSet<seqan::Dna5String> getallseqs();
+        Tdbcontainer GetDbContainer();
 };
 
 
 class DatabaseHandlerExceptions : public std::exception {
     private:
-    std::string err_msg;
+        std::string err_msg;
     
     public:
-    DatabaseHandlerExceptions(const std::string msg) : err_msg(msg) {};
+        DatabaseHandlerExceptions(const std::string msg) : err_msg(msg) {};
         ~DatabaseHandlerExceptions() throw() {};
         const char *what() const throw() { return this->err_msg.c_str(); };
 };
