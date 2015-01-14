@@ -35,7 +35,8 @@ void DatabaseHandler::open(){
     }
 }
 
-void DatabaseHandler::print_pretty(){
+void DatabaseHandler::print_pretty()
+{
     for(MapIterator dbiter = dbcontainer.begin(); dbiter != dbcontainer.end(); dbiter++)
         std::cout << dbiter->first << " -> " << dbiter->second << std::endl;
 }

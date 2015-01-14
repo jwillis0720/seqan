@@ -202,6 +202,7 @@ int main(int argc, char const ** argv)
     
     ///Containers i.e.maps
     Tdbcontainer VGeneContainer = VGeneDB.GetDbContainer();
+    Tdbcontainer JGeneContainer = JGeneDB.GetDbContainer();
     
     if (!isGood(seqStream))
     {
@@ -217,7 +218,16 @@ int main(int argc, char const ** argv)
             return false;
         }
         
+        //Align V Gene
         AlignAntibody VGeneAlign(id, seq, VGeneContainer, options.verbose);
+        GeneScores vgene_score = VGeneAlign.GetBestAlignment();
+        
+        //Align J Gene
+        AlignAntibody JGeneAlign(id, seq, JGeneContainer, options.verbose);
+        GeneScores jgene_score = JGeneAlign.GetBestAlignment();
+        
+        
+    
     }
 
     

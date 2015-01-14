@@ -32,12 +32,18 @@
 // Author: Your Name <your.email@example.net>
 // ==========================================================================
 
+#include <seqan/align.h>
+
+
 #ifndef SANDBOX_SEQIG_SANDBOX_APPS_SEQIG_STRUCTDEFS_H_
 #define SANDBOX_SEQIG_SANDBOX_APPS_SEQIG_STRUCTDEFS_H_
 typedef seqan::CharString cs;
 typedef seqan::Dna5String ds;
 typedef std::map<cs,ds> Tdbcontainer;
 typedef Tdbcontainer::const_iterator MapIterator;
+
+//alignment
+typedef seqan::Align<seqan::Dna5String,seqan::ArrayGaps> TAlignmnet;
 
 struct SeqIgOptions
 {
@@ -54,5 +60,17 @@ struct DatabasePaths
     std::string Vgene_db;
     std::string Dgene_db;
     std::string Jgene_db;
+};
+
+
+struct GeneScores {
+    int topscore;
+    TAlignmnet align;
+    int begin_query_match;
+    int begin_subject_match;
+    int end_query_match;
+    int end_subject_match;
+    seqan::CharString topgene;
+    int translate_begin;
 };
 #endif  // #ifndef SANDBOX_SEQIG_SANDBOX_APPS_SEQIG_STRUCTDEFS_H_
