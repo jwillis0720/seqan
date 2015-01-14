@@ -220,16 +220,14 @@ int main(int argc, char const ** argv)
         
         //Align V Gene
         AlignAntibody VGeneAlign(id, seq, VGeneContainer, options.verbose);
-        GeneScores vgene_score = VGeneAlign.GetBestAlignment();
+        if (options.verbose)
+            VGeneAlign.PrintBestAlignment();
         
         //Align J Gene
         AlignAntibody JGeneAlign(id, seq, JGeneContainer, options.verbose);
-        GeneScores jgene_score = JGeneAlign.GetBestAlignment();
-        
-        
+        if(options.verbose)
+            JGeneAlign.PrintBestAlignment();
     
     }
-
-    
     return 0;
 }

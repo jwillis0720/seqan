@@ -18,24 +18,33 @@ class AlignAntibody
 {
 
 private:
-    seqan::Dna5String current_seq;
-    seqan::CharString current_id;
-    seqan::CharString best_gene;
+    //primatives
     bool _verbose;
-    int top_score;
-    Tdbcontainer current_container;
-    TAlignmnet best_align;
+    int _top_score;
+    
+    //best alignment holders
+    seqan::Dna5String _current_seq;
+    seqan::CharString _current_id;
+    seqan::CharString _best_gene;
+    TAlignmnet _best_align;
     
     //private methods
-    void DoPairWiseLocalAgainstDb(seqan::CharString const &, seqan::Dna5String const &);
-    //int findNoverhang(int const &, int const &);
+    void DoPairWiseLocalAgainstDb(seqan::CharString const &,
+                                  seqan::Dna5String const &);
 
 public:
     AlignAntibody(seqan::CharString const &,
                       seqan::Dna5String const &,
                       Tdbcontainer const &,
                       bool const &);
-    GeneScores GetBestAlignment();
+    int GetTopScore();
+    TAlignmnet GetTopAlignment();
+    seqan::CharString GetTopGene();
+    int GetBeginQueryMatch();
+    int GetEndQueryMatch();
+    int GetBeginGeneMatch();
+    int GetEndGeneMatch();
+    void PrintBestAlignment();
 };
 
 #endif /* defined(__seqan_sandbox__AlignAntibody__) */

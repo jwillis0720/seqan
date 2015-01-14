@@ -63,14 +63,4 @@ struct DatabasePaths
 };
 
 
-struct GeneScores {
-    int topscore;
-    TAlignmnet align;
-    int begin_query_match;
-    int begin_subject_match;
-    int end_query_match;
-    int end_subject_match;
-    seqan::CharString topgene;
-    int translate_begin;
-};
 #endif  // #ifndef SANDBOX_SEQIG_SANDBOX_APPS_SEQIG_STRUCTDEFS_H_
