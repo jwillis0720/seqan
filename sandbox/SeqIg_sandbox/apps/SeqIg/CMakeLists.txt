@@ -41,6 +41,7 @@ AlignAntibody.h
 AlignAntibody.cpp
 AntibodyJunction.h
 AntibodyJunction.cpp
+SeqIgUtility.h
 )
 
 # Add dependencies found by find_package (SeqAn).

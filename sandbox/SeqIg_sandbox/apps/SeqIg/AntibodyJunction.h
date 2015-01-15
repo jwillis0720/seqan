@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include "AlignAntibody.h"
-
+#include "SeqIgUtility.h"
 class AntibodyJunction
 {
 private:

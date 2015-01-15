@@ -59,7 +59,20 @@ AntibodyJunction::AntibodyJunction(AlignAntibody & VGene, AlignAntibody &JGene,A
 
     _EntireAntibodySeq = infix(raw_sequence, _VGeneQueryStartTranslation, _JGeneQueryEnd);
     std::cout << "V Gene Start " << _VGeneQueryStartTranslation << std::endl;;
-    std::cout << "Entire Antibody In Frame : " << _EntireAntibodySeq;
+    std::cout << "Entire Antibody In Frame : " << _EntireAntibodySeq << std::endl;
+    
+    seqan::CharString AASequence;
+    for(unsigned int i=0; i < length(_EntireAntibodySeq); i=i+3)
+    {
+        seqan::CharString codon;
+        char amino_acid;
+        codon = infix(_EntireAntibodySeq,i,i+3);
+        amino_acid = SeqIgUtility::CodonMap[codon];
+        AASequence += amino_acid;
+    }
+    
+    std::cout << std::endl;
+    std::cout << AASequence << std::endl;
     
     
 };
