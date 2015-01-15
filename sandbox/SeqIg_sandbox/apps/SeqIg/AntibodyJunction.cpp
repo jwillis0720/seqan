@@ -7,6 +7,7 @@
 //
 
 #include "AntibodyJunction.h"
+#include <seqan/translation.h>
 
 //Constructor One if we have just V and J Gene
 AntibodyJunction::AntibodyJunction(AlignAntibody & VGene, AlignAntibody & JGene)
@@ -67,20 +68,10 @@ AntibodyJunction::AntibodyJunction(AlignAntibody & VGene, AlignAntibody &JGene,A
     std::cout << "V Gene Start " << _VGeneQueryStartTranslation << std::endl;;
     std::cout << "Entire Antibody In Frame : " << _EntireAntibodySeq << std::endl;
     
-    //seqan::StringSet<seqan::String<seqan::AminoAcid>, seqan::Owner<seqan::ConcatDirect<> > > aaSeqs;
-    //int trans;
-    //trans = seqan::translate(aaSeqs,_EntireAntibodySeq);
-    
-//    for(unsigned int i=0; i < length(_EntireAntibodySeq); i=i+3)
-//    {
-//        seqan::CharString codon;
-//        char amino_acid;
-//        codon = seqan::infix(_EntireAntibodySeq,i,i+3);
-//        amino_acid = SeqIgUtility::CodonMap[codon];
-//        AASequence += amino_acid;
-//    }
-    
+    seqan::StringSet<seqan::String<seqan::AminoAcid>, seqan::Owner<seqan::ConcatDirect<> > > aaSeqs;
+    int trans;
+    trans = seqan::translate(aaSeqs,_EntireAntibodySeq);
     std::cout << std::endl;
-    //std::cout << &aaSeqs << std::endl;
+    std::cout << aaSeqs.concat << std::endl;
     
 };

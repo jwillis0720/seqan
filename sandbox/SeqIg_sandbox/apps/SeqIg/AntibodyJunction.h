@@ -10,7 +10,7 @@
 #define __seqan_sandbox__AntibodyJunction__
 
 
-#include <seqan/translation.h>
+//#include <seqan/translation.h>
 #include <stdio.h>
 #include "AlignAntibody.h"
 #include "SeqIgUtility.h"
