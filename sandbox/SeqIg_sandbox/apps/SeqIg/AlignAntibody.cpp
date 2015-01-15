@@ -28,8 +28,8 @@ AlignAntibody::AlignAntibody(seqan::CharString const & id,
     //Iterate through database and do an alignment for each member
     for(MapIterator dbiter = dbcontainer.begin(); dbiter != dbcontainer.end(); dbiter++)
     {
-        seqan::CharString _gene_id = dbiter->first;
-        seqan::Dna5String _gene_sequence =  dbiter->second;
+        seqan::CharString _gene_id = dbiter-> first;
+        seqan::Dna5String _gene_sequence =  dbiter-> second;
         //Pass the database gene and id
         AlignAntibody::DoPairWiseLocalAgainstDb(_gene_id,_gene_sequence);
     }
@@ -122,17 +122,3 @@ void AlignAntibody::PrintBestAlignment (){
     std::cout << "Aligns Query Seq[" << GetBeginQueryMatch() << ":" << GetEndGeneMatch() << "]";
     std::cout << " and Gene Seq[" << GetBeginGeneMatch() << ":" <<  GetEndGeneMatch() << "]" << std::endl;
 }
-
-//int AlignAntibody::findNoverhang(int const & begin_query_v_match, int const & end_query_v_match)
-//{
-//    int count = 1;
-//    for (int i = begin_query_v_match+1;i < end_query_v_match+1; i++)
-//    {
-//        if(i%3 == 0 || i == 1){
-//            return count;
-//        }
-//        count ++;
-//    }
-//    
-//    return 0;
-//}

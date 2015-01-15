@@ -37,9 +37,9 @@
 
 #ifndef SANDBOX_SEQIG_SANDBOX_APPS_SEQIG_STRUCTDEFS_H_
 #define SANDBOX_SEQIG_SANDBOX_APPS_SEQIG_STRUCTDEFS_H_
-typedef seqan::CharString cs;
-typedef seqan::Dna5String ds;
-typedef std::map<cs,ds> Tdbcontainer;
+typedef seqan::CharString Tcs;
+typedef seqan::Dna5String Tds;
+typedef std::map<Tcs,Tds> Tdbcontainer;
 typedef Tdbcontainer::const_iterator MapIterator;
 
 //alignment

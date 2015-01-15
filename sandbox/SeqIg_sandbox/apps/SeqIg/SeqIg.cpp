@@ -44,6 +44,7 @@
 #include "SeqIg.h"
 #include "StructDefs.h"
 #include "AlignAntibody.h"
+#include "AntibodyJunction.h"
 
 //An inline function to quickly check if a file or directory exists
 inline bool check_if_dir_exists (const std::string &name) {
@@ -285,6 +286,7 @@ int main(int argc, char const ** argv)
             {
                 DGeneAlign.PrintBestAlignment();
             }
+            AntibodyJunction AJ(VGeneAlign, JGeneAlign, DGeneAlign, seq);
         }
     }
     
