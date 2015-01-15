@@ -57,22 +57,30 @@ AntibodyJunction::AntibodyJunction(AlignAntibody & VGene, AlignAntibody &JGene,A
         }
     }
 
+    
+    if(_VGeneQueryStartTranslation > _JGeneQueryEnd){
+        std::cerr << "J gene is becoming before V Gene \n \n";
+        throw AntibodyJunctionException("J Gene coming before V Gene for Gene \n");
+
+    }
     _EntireAntibodySeq = infix(raw_sequence, _VGeneQueryStartTranslation, _JGeneQueryEnd);
     std::cout << "V Gene Start " << _VGeneQueryStartTranslation << std::endl;;
     std::cout << "Entire Antibody In Frame : " << _EntireAntibodySeq << std::endl;
     
-    seqan::CharString AASequence;
-    for(unsigned int i=0; i < length(_EntireAntibodySeq); i=i+3)
-    {
-        seqan::CharString codon;
-        char amino_acid;
-        codon = infix(_EntireAntibodySeq,i,i+3);
-        amino_acid = SeqIgUtility::CodonMap[codon];
-        AASequence += amino_acid;
-    }
+    //seqan::StringSet<seqan::String<seqan::AminoAcid>, seqan::Owner<seqan::ConcatDirect<> > > aaSeqs;
+    //int trans;
+    //trans = seqan::translate(aaSeqs,_EntireAntibodySeq);
+    
+//    for(unsigned int i=0; i < length(_EntireAntibodySeq); i=i+3)
+//    {
+//        seqan::CharString codon;
+//        char amino_acid;
+//        codon = seqan::infix(_EntireAntibodySeq,i,i+3);
+//        amino_acid = SeqIgUtility::CodonMap[codon];
+//        AASequence += amino_acid;
+//    }
     
     std::cout << std::endl;
-    std::cout << AASequence << std::endl;
-    
+    //std::cout << &aaSeqs << std::endl;
     
 };

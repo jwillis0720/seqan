@@ -286,7 +286,14 @@ int main(int argc, char const ** argv)
             {
                 DGeneAlign.PrintBestAlignment();
             }
-            AntibodyJunction AJ(VGeneAlign, JGeneAlign, DGeneAlign, seq);
+            try
+            {
+                AntibodyJunction AJ(VGeneAlign, JGeneAlign, DGeneAlign, seq);
+            }catch(AntibodyJunctionException &msg) {
+                std::cerr << "Problem with id -> " << id << std::endl;
+                std::cerr << msg.what() << std::endl;
+                std::cerr << "Skipping" << std::endl;
+            }
         }
     }
     

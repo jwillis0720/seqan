@@ -9,9 +9,13 @@
 #ifndef __seqan_sandbox__AntibodyJunction__
 #define __seqan_sandbox__AntibodyJunction__
 
+
+#include <seqan/translation.h>
 #include <stdio.h>
 #include "AlignAntibody.h"
 #include "SeqIgUtility.h"
+
+
 class AntibodyJunction
 {
 private:
@@ -52,6 +56,17 @@ public:
     //V D and J
     AntibodyJunction(AlignAntibody &, AlignAntibody &, AlignAntibody &, Tds &);
     ~AntibodyJunction() {};
+};
+
+
+class AntibodyJunctionException : public std::exception
+{
+private:
+    std::string err_msg;
+public:
+    AntibodyJunctionException(const std::string msg) : err_msg(msg) {};
+    ~AntibodyJunctionException() throw() {};
+    const char *what() const throw() { return this->err_msg.c_str(); };
 };
 
 #endif /* defined(__seqan_sandbox__AntibodyJunction__) */
