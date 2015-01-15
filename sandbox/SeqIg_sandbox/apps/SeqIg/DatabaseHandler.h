@@ -14,30 +14,31 @@
 #include "SeqIg.h"
 #include "StructDefs.h"
 
-class DatabaseHandler {
-    private :
-        const char * dbname;
-        seqan::StringSet<seqan::CharString> ids;
-        seqan::StringSet<seqan::Dna5String> seqs;
-        Tdbcontainer dbcontainer;
-        int rresult;
-    public:
-        DatabaseHandler(std::string const &);
-        void open();
-        void print_pretty();
-        seqan::StringSet<seqan::Dna5String> getallseqs();
-        Tdbcontainer GetDbContainer();
+class DatabaseHandler
+{
+private :
+    const char * _dbname;
+    seqan::StringSet<seqan::CharString> _ids;
+    seqan::StringSet<seqan::Dna5String> _seqs;
+    Tdbcontainer _dbcontainer;
+    int _rresult;
+public:
+    DatabaseHandler(std::string const &);
+    ~DatabaseHandler(){};
+    void Open();
+    void PrintPretty();
+    seqan::StringSet<seqan::Dna5String> GetAllSeqs();
+    Tdbcontainer GetDbContainer();
 };
 
-
-class DatabaseHandlerExceptions : public std::exception {
-    private:
-        std::string err_msg;
-    
-    public:
-        DatabaseHandlerExceptions(const std::string msg) : err_msg(msg) {};
-        ~DatabaseHandlerExceptions() throw() {};
-        const char *what() const throw() { return this->err_msg.c_str(); };
+class DatabaseHandlerExceptions : public std::exception
+{
+private:
+    std::string err_msg;
+public:
+    DatabaseHandlerExceptions(const std::string msg) : err_msg(msg) {};
+    ~DatabaseHandlerExceptions() throw() {};
+    const char *what() const throw() { return this->err_msg.c_str(); };
 };
 
 #endif /* defined(__seqan_sandbox__DatabaseHandler__) */

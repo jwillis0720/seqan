@@ -45,6 +45,7 @@ typedef Tdbcontainer::const_iterator MapIterator;
 //alignment
 typedef seqan::Align<seqan::Dna5String,seqan::ArrayGaps> TAlignmnet;
 
+//Set by ArgParser in main method
 struct SeqIgOptions
 {
     std::string database_path;
@@ -55,6 +56,7 @@ struct SeqIgOptions
     bool verbose;
 };
 
+//The database paths are computed and set in main
 struct DatabasePaths
 {
     std::string Vgene_db;

@@ -12,7 +12,7 @@
 
 #ifndef seqan_SeqIg_h
 #define seqan_SeqIg_h
-void setUpArgumentParser(seqan::ArgumentParser &);
-void setDatabaseFastas(SeqIgOptions const &options, DatabasePaths &);
-seqan::ArgumentParser::ParseResult extractOptions(seqan::ArgumentParser const &, SeqIgOptions &);
+void SetUpArgumentParser(seqan::ArgumentParser &);
+void SetDatabaseFastas(SeqIgOptions const &options, DatabasePaths &);
+seqan::ArgumentParser::ParseResult ExtractOptions(seqan::ArgumentParser const &, SeqIgOptions &);
 #endif

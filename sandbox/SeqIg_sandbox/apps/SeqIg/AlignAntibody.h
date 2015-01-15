@@ -37,6 +37,8 @@ public:
                       seqan::Dna5String const &,
                       Tdbcontainer const &,
                       bool const &);
+    
+    //Getters
     int GetTopScore();
     TAlignmnet GetTopAlignment();
     seqan::CharString GetTopGene();
@@ -44,6 +46,8 @@ public:
     int GetEndQueryMatch();
     int GetBeginGeneMatch();
     int GetEndGeneMatch();
+    
+    //For verbose
     void PrintBestAlignment();
 };
 

@@ -11,40 +11,42 @@
 #include "DatabaseHandler.h"
 #include "StructDefs.h"
 
-
+//Constructor
 DatabaseHandler::DatabaseHandler(std::string const &Databasename){
-    dbname = Databasename.c_str();
+    _dbname = Databasename.c_str();
 }
 
-void DatabaseHandler::open(){
+void DatabaseHandler::Open(){
     
     //Sequence Stream constructor with c_string defined in .h
-    seqan::SequenceStream SeqIO(dbname);
+    seqan::SequenceStream SeqIO(_dbname);
     
     //readall sets ids and seqs that were init in .h
-    rresult = seqan::readAll(ids,seqs,SeqIO);
+    _rresult = seqan::readAll(_ids,_seqs,SeqIO);
     
-    if (rresult != 0)
+    if (_rresult != 0)
     {
-        throw DatabaseHandlerExceptions("Can't Read FASTA File " + std::string(dbname) + "\n");  // Could not read file.
+        // Could not read file.
+        throw DatabaseHandlerExceptions("Can't Read FASTA File " +
+                                        std::string(_dbname) + "\n");
     }
     
-    //Then we set a map called dbcontainer to have all our shit
-    for(unsigned i= 0;i< length(seqs);i++){
-        dbcontainer[ids[i]] = seqs[i];
+    //Then we set a map called dbcontainer to have all our databases
+    for(unsigned i= 0;i< length(_seqs);i++){
+        _dbcontainer[_ids[i]] = _seqs[i];
     }
 }
 
-void DatabaseHandler::print_pretty()
+void DatabaseHandler::PrintPretty()
 {
-    for(MapIterator dbiter = dbcontainer.begin(); dbiter != dbcontainer.end(); dbiter++)
+    for(MapIterator dbiter = _dbcontainer.begin(); dbiter != _dbcontainer.end(); dbiter++)
         std::cout << dbiter->first << " -> " << dbiter->second << std::endl;
 }
 
-seqan::StringSet<seqan::Dna5String> DatabaseHandler::getallseqs(){
-    return seqs;
+seqan::StringSet<seqan::Dna5String> DatabaseHandler::GetAllSeqs(){
+    return _seqs;
 };
 
 Tdbcontainer DatabaseHandler::GetDbContainer(){
-    return dbcontainer;
+    return _dbcontainer;
 }
