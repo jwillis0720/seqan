@@ -19,4 +19,8 @@ public:
     static Tcodonmap CreateCodonTable();
 
 };
+
+
+
+
 #endif

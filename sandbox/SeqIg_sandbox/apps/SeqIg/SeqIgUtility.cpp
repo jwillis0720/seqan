@@ -77,3 +77,8 @@ SeqIgUtility::Tcodonmap SeqIgUtility::CreateCodonTable()
     m["GGG"] = 'G';
     return m;
 };
+
+
+
+
+

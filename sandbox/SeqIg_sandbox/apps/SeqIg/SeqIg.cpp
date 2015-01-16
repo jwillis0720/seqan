@@ -47,7 +47,6 @@
 #include "AlignAntibody.h"
 #include "AntibodyJunction.h"
 
-
 //An inline function to quickly check if a file or directory exists
 inline bool check_if_dir_exists (const std::string &name) {
     struct stat buffer;
@@ -55,24 +54,65 @@ inline bool check_if_dir_exists (const std::string &name) {
 }
 
 
-void GetDatabaseFiles(const std::string &db_path)
+inline TSVector &split(const std::string &s, char delim, std::vector<std::string> &elems) {
+    std::stringstream ss(s);
+    std::string item;
+    while (std::getline(ss, item, delim)) {
+        elems.push_back(item);
+    }
+    return elems;
+};
+
+
+inline TSVector Split(const std::string &s, char delim) {
+    TSVector elems;
+    split(s, delim, elems);
+    return elems;
+};
+
+
+inline TCMap GetDatabaseFiles(const std::string & db_path, const bool & verbose)
 {
-    // list all files in current directory.
     //You could put any file path in here, e.g. "/home/me/mwah" to list that directory
     boost::filesystem::path path(db_path);
     boost::filesystem::directory_iterator end_itr;
+    TCMap map_of_files;
     
     // cycle through the directory
     for (boost::filesystem::directory_iterator itr(db_path); itr != end_itr; ++itr)
     {
         // If it's not a directory, list it. If you want to list directories too, just remove this check.
-        if (is_regular_file(itr->path())) {
+        if (is_regular_file(itr->path()))
+        {
             // assign current file name to current_file and echo it out to the console.
             std::string current_file = itr->path().string();
-            std::cout << current_file << std::endl;
+            
+            //Split by directory path and return a vector of the split
+            TSVector split_lines = Split(current_file,'/');
+            
+            //Then we get the last thing in there to get the filename
+            std::string file_name = split_lines.back();
+            
+            //Gene DB class will handle parsing this into memory
+            DatabaseHandler GeneDB(current_file);
+            //Try to open
+            try {
+                GeneDB.Open();
+                if(verbose)
+                {
+                    std::cout << "Loading DB at -> " << current_file << std::endl;
+                    GeneDB.PrintPretty();
+                }
+            }catch(DatabaseHandlerExceptions &msg){
+                std::cerr << "Couldn't open Database file" << std::endl;
+                std::cerr << msg.what();
+                exit(1);
+            }
+            seqan::CharString sub_file = file_name.substr(0, file_name.size()-6);
+            map_of_files[sub_file] = GeneDB.GetDbContainer();
         }
     }
-    exit(1);
+    return map_of_files;
 }
 
 
@@ -176,10 +216,11 @@ void SetDatabaseFastas(SeqIgOptions const &options, DatabasePaths &dbpaths)
                     "/" + options.species;
     dbpaths.Vgene_db = top_level_dir + "/V";
     dbpaths.Vgene_family = dbpaths.Vgene_db + "/family.fasta";
-    //dbpaths.Vgene_files = "";
-    GetDatabaseFiles(dbpaths.Vgene_db);
+    dbpaths.Vgene_files = GetDatabaseFiles(dbpaths.Vgene_db + "/genes/", options.verbose);
     dbpaths.Dgene_db = top_level_dir + "/D";
-    dbpaths.Jgene_db = top_level_dir + "/J/human_gl_J.fasta";
+    dbpaths.Dgene_family = dbpaths.Dgene_db  + "/family.fasta";
+    //dbpaths.Dgene_files = GetDatabaseFiles(dbpaths.Dgene_db + "/genes/", options.verbose);
+    dbpaths.Jgene_family = top_level_dir + "/J/family.fasta";
 };
 
 
@@ -225,19 +266,20 @@ int main(int argc, char const ** argv)
             std::cerr << msg.what();
             return 1;
     }
+    
     //Containers i.e.maps changes the database into a map structure we can iterate in memory
-    Tdbcontainer VGeneContainer = VGeneDB.GetDbContainer();
-
+    Tdbcontainer VGeneFamilyContainer = VGeneDB.GetDbContainer();
     
     //J Gene DB class will handle parsing this into memory
-    DatabaseHandler JGeneDB(dbpaths.Jgene_db);
+    DatabaseHandler JGeneDB(dbpaths.Jgene_family);
 
     //Try to  open
-    try {
+    try
+    {
         JGeneDB.Open();
         if(options.verbose)
         {
-            std::cout << "Loading DB at -> " << dbpaths.Jgene_db << std::endl;
+            std::cout << "Loading DB at -> " << dbpaths.Jgene_family << std::endl;
             JGeneDB.PrintPretty();
         }
     }catch(DatabaseHandlerExceptions &msg){
@@ -245,14 +287,15 @@ int main(int argc, char const ** argv)
         std::cerr << msg.what();
         return 1;
     }
+    
+    //Loads the database
     Tdbcontainer JGeneContainer = JGeneDB.GetDbContainer();
 
     /*Lastly if it is a heavy chain, it will have a D gene and corresponding database*/
-    /*
-    Tdbcontainer DGeneContainer;
+    Tdbcontainer DFamilyContainer;
     if(options.chain == "heavy")
     {
-        DatabaseHandler DGeneDB(dbpaths.Dgene_db);
+        DatabaseHandler DGeneDB(dbpaths.Dgene_family);
         try {
             DGeneDB.Open();
             if(options.verbose)
@@ -265,10 +308,13 @@ int main(int argc, char const ** argv)
             std::cerr << msg.what();
             return 1;
         }
-        DGeneContainer = DGeneDB.GetDbContainer();
+        DFamilyContainer = DGeneDB.GetDbContainer();
     }
-    */
-     
+    
+    /////////////////
+    //INPUT SECTION//
+    /////////////////
+    
     //This goes through the input file, but needs to be a c_str for seqan
     const char * input_file_name;
     input_file_name = options.input_file.c_str();
@@ -294,35 +340,53 @@ int main(int argc, char const ** argv)
             return 1;
         }
                 
-        //Align V Gene
-        AlignAntibody VGeneFamilyAlign(id, seq, VGeneContainer, options.verbose);
+        //Align V Gene Family to narrow down which V Gene family is it in
+        AlignAntibody VGeneFamilyAlign(id, seq, VGeneFamilyContainer, options.verbose);
         if (options.verbose)
             VGeneFamilyAlign.PrintBestAlignment();
+
+        //Get best V Gene family
+        seqan::CharString best_v_family = VGeneFamilyAlign.GetTopGene();
         
-        //Align J Gene
+        //Gets best container based on which family
+        Tdbcontainer VGeneContainer = dbpaths.Vgene_files[best_v_family];
+        AlignAntibody VGeneAlign(id, seq, VGeneContainer, options.verbose);
+        
+        //Print bast alignment
+        if(options.verbose)
+            VGeneAlign.PrintBestAlignment();
+        
+        
+        //Align J Gene. There are few enough J genes we don't have to narrow down family first
         AlignAntibody JGeneAlign(id, seq, JGeneContainer, options.verbose);
         if(options.verbose)
-            JGeneAlign.PrintBestAlignment();
+          JGeneAlign.PrintBestAlignment();
     
         //if heavy, align D gene too
-        /*
+        
         if(options.chain == "heavy")
         {
-            AlignAntibody DGeneAlign(id, seq, DGeneContainer, options.verbose);
+            AlignAntibody DFamilyAlign(id, seq, DFamilyContainer, options.verbose);
             if(options.verbose)
             {
-                DGeneAlign.PrintBestAlignment();
+                DFamilyAlign.PrintBestAlignment();
             }
+            
+            //*Todo might implement a subdir but not yet
+            //Get best D Gene family
+            //seqan::CharString best_d_family = DFamilyAlign.GetTopGene();
+            //Tdbcontainer DGeneContainer = dbpaths.Dgene_files[best_d_family];
+            //AlignAntibody DGeneAlign(id, seq, DFamilyContainer, options.verbose);
+            
             try
             {
-                AntibodyJunction AJ(VGeneAlign, JGeneAlign, DGeneAlign, seq);
+                AntibodyJunction AJ(VGeneAlign, JGeneAlign, DFamilyAlign, seq);
             }catch(AntibodyJunctionException &msg) {
                 std::cerr << "Problem with id -> " << id << std::endl;
                 std::cerr << msg.what() << std::endl;
                 std::cerr << "Skipping" << std::endl;
             }
         }
-         */
     }
     
     //Program exited successfully
