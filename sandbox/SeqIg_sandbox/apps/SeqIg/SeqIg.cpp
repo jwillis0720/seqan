@@ -32,6 +32,7 @@
 // Author: Your Name jwillis0720@gmail.com>
 // ==========================================================================
 
+#include "boost/filesystem.hpp"
 
 //Seqan Headers
 #include <seqan/basic.h>
@@ -51,6 +52,27 @@
 inline bool check_if_dir_exists (const std::string &name) {
     struct stat buffer;
     return (stat (name.c_str(), &buffer) == 0);
+}
+
+
+void GetDatabaseFiles(const std::string &db_path)
+{
+    // list all files in current directory.
+    //You could put any file path in here, e.g. "/home/me/mwah" to list that directory
+    boost::filesystem::path path(db_path);
+    boost::filesystem::directory_iterator end_itr;
+    
+    // cycle through the directory
+    for (boost::filesystem::directory_iterator itr(db_path); itr != end_itr; ++itr)
+    {
+        // If it's not a directory, list it. If you want to list directories too, just remove this check.
+        if (is_regular_file(itr->path())) {
+            // assign current file name to current_file and echo it out to the console.
+            std::string current_file = itr->path().string();
+            std::cout << current_file << std::endl;
+        }
+    }
+    exit(1);
 }
 
 
@@ -93,7 +115,7 @@ void SetUpArgumentParser(seqan::ArgumentParser & parser)
     setRequired(parser, "f");
     
     //Set Database Default Values
-    setDefaultValue(parser, "database_path", "/Users/jordanwillis/Git_repos/pyig/data_dir");
+    setDefaultValue(parser, "database_path", "/Users/jordanwillis/Git_repos/seqan/seqig_data");
     setDefaultValue(parser, "receptor", "Ig");
     setDefaultValue(parser, "chain", "heavy");
     setDefaultValue(parser, "species", "human");
@@ -151,11 +173,13 @@ void SetDatabaseFastas(SeqIgOptions const &options, DatabasePaths &dbpaths)
     top_level_dir =  options.database_path +
                     "/" + options.receptor +
                     "/" + options.chain +
-                    "/" + options.species +
                     "/" + options.species;
-    dbpaths.Vgene_db = top_level_dir +  "_gl_V.fasta";
-    dbpaths.Dgene_db = top_level_dir +  "_gl_D.fasta";
-    dbpaths.Jgene_db = top_level_dir +  "_gl_J.fasta";
+    dbpaths.Vgene_db = top_level_dir + "/V";
+    dbpaths.Vgene_family = dbpaths.Vgene_db + "/family.fasta";
+    //dbpaths.Vgene_files = "";
+    GetDatabaseFiles(dbpaths.Vgene_db);
+    dbpaths.Dgene_db = top_level_dir + "/D";
+    dbpaths.Jgene_db = top_level_dir + "/J/human_gl_J.fasta";
 };
 
 
@@ -186,14 +210,14 @@ int main(int argc, char const ** argv)
     SetDatabaseFastas(options, dbpaths);
     
     //V Gene DB class will handle parsing this into memory
-    DatabaseHandler VGeneDB(dbpaths.Vgene_db);
+    DatabaseHandler VGeneDB(dbpaths.Vgene_family);
 
     //Try to open
     try {
         VGeneDB.Open();
         if(options.verbose)
         {
-            std::cout << "Loading DB at -> " << dbpaths.Vgene_db << std::endl;
+            std::cout << "Loading DB at -> " << dbpaths.Vgene_family << std::endl;
             VGeneDB.PrintPretty();
         }
     }catch(DatabaseHandlerExceptions &msg){
@@ -204,7 +228,6 @@ int main(int argc, char const ** argv)
     //Containers i.e.maps changes the database into a map structure we can iterate in memory
     Tdbcontainer VGeneContainer = VGeneDB.GetDbContainer();
 
-    
     
     //J Gene DB class will handle parsing this into memory
     DatabaseHandler JGeneDB(dbpaths.Jgene_db);
@@ -225,6 +248,7 @@ int main(int argc, char const ** argv)
     Tdbcontainer JGeneContainer = JGeneDB.GetDbContainer();
 
     /*Lastly if it is a heavy chain, it will have a D gene and corresponding database*/
+    /*
     Tdbcontainer DGeneContainer;
     if(options.chain == "heavy")
     {
@@ -243,7 +267,8 @@ int main(int argc, char const ** argv)
         }
         DGeneContainer = DGeneDB.GetDbContainer();
     }
-    
+    */
+     
     //This goes through the input file, but needs to be a c_str for seqan
     const char * input_file_name;
     input_file_name = options.input_file.c_str();
@@ -270,9 +295,9 @@ int main(int argc, char const ** argv)
         }
                 
         //Align V Gene
-        AlignAntibody VGeneAlign(id, seq, VGeneContainer, options.verbose);
+        AlignAntibody VGeneFamilyAlign(id, seq, VGeneContainer, options.verbose);
         if (options.verbose)
-            VGeneAlign.PrintBestAlignment();
+            VGeneFamilyAlign.PrintBestAlignment();
         
         //Align J Gene
         AlignAntibody JGeneAlign(id, seq, JGeneContainer, options.verbose);
@@ -280,6 +305,7 @@ int main(int argc, char const ** argv)
             JGeneAlign.PrintBestAlignment();
     
         //if heavy, align D gene too
+        /*
         if(options.chain == "heavy")
         {
             AlignAntibody DGeneAlign(id, seq, DGeneContainer, options.verbose);
@@ -296,6 +322,7 @@ int main(int argc, char const ** argv)
                 std::cerr << "Skipping" << std::endl;
             }
         }
+         */
     }
     
     //Program exited successfully

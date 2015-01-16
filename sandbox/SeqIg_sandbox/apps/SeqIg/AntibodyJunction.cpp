@@ -49,6 +49,8 @@ AntibodyJunction::AntibodyJunction(AlignAntibody & VGene, AlignAntibody &JGene,A
 
 
     //This will go into its own fuction, but I need to make sure it translates first. It works great for the time being.
+    
+    
     for(int i = _VGeneGeneStart, j = _VGeneQueryStart; i < _VGeneGeneEnd ; i++, j++)
     {
         if(i % 3 == 0)
@@ -64,14 +66,13 @@ AntibodyJunction::AntibodyJunction(AlignAntibody & VGene, AlignAntibody &JGene,A
         throw AntibodyJunctionException("J Gene coming before V Gene for Gene \n");
 
     }
+    
     _EntireAntibodySeq = infix(raw_sequence, _VGeneQueryStartTranslation, _JGeneQueryEnd);
     std::cout << "V Gene Start " << _VGeneQueryStartTranslation << std::endl;;
     std::cout << "Entire Antibody In Frame : " << _EntireAntibodySeq << std::endl;
+    if (seqan::translate(_AbAASeq,_EntireAntibodySeq) != 0)
+        throw AntibodyJunctionException("Can't Translate Seqeuce");
     
-    seqan::StringSet<seqan::String<seqan::AminoAcid>, seqan::Owner<seqan::ConcatDirect<> > > aaSeqs;
-    int trans;
-    trans = seqan::translate(aaSeqs,_EntireAntibodySeq);
-    std::cout << std::endl;
-    std::cout << aaSeqs.concat << std::endl;
+    std::cout << "\n\n" << _AbAASeq.concat << std::endl;
     
 };

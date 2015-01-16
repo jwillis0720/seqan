@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include "AlignAntibody.h"
 #include "SeqIgUtility.h"
-
+#include "StructDefs.h"
 
 class AntibodyJunction
 {
@@ -49,8 +49,10 @@ private:
     //Newly assigned Variables
     int _VGeneQueryStartTranslation;
     Tds _EntireAntibodySeq;
+    TAASeq _AbAASeq;
     
 public:
+
     //V and J
     AntibodyJunction(AlignAntibody &, AlignAntibody &);
     //V D and J

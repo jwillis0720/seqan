@@ -41,6 +41,7 @@ typedef seqan::CharString Tcs;
 typedef seqan::Dna5String Tds;
 typedef std::map<Tcs,Tds> Tdbcontainer;
 typedef Tdbcontainer::const_iterator MapIterator;
+typedef seqan::StringSet<seqan::String<seqan::AminoAcid>, seqan::Owner<seqan::ConcatDirect<> > > TAASeq;
 
 //alignment
 typedef seqan::Align<seqan::Dna5String,seqan::ArrayGaps> TAlignmnet;
@@ -60,8 +61,10 @@ struct SeqIgOptions
 struct DatabasePaths
 {
     std::string Vgene_db;
+    std::string Vgene_family;
     std::string Dgene_db;
     std::string Jgene_db;
+    std::map <std::string,std::string> Vgene_files; 
 };
 
 
