@@ -20,24 +20,27 @@
 							<option id="cdt.managedbuild.option.gnu.cross.prefix.199379789" name="Prefix" superClass="cdt.managedbuild.option.gnu.cross.prefix"/>
 							<option id="cdt.managedbuild.option.gnu.cross.path.822431820" name="Path" superClass="cdt.managedbuild.option.gnu.cross.path"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.targetPlatform.gnu.cross.356818906" isAbstract="false" osList="all" superClass="cdt.managedbuild.targetPlatform.gnu.cross"/>
-							<builder buildPath="${workspace_loc:/SeqIg}/Default" id="cdt.managedbuild.builder.gnu.cross.169595136" name="Gnu Make Builder.Default" superClass="cdt.managedbuild.builder.gnu.cross"/>
+							<builder buildPath="${workspace_loc:/SeqIg}/Default" id="cdt.managedbuild.builder.gnu.cross.169595136" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.builder.gnu.cross"/>
 							<tool id="cdt.managedbuild.tool.gnu.cross.c.compiler.1413620434" name="Cross GCC Compiler" superClass="cdt.managedbuild.tool.gnu.cross.c.compiler">
-								<option id="gnu.c.compiler.option.include.paths.816816002" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+								<option id="gnu.c.compiler.option.include.paths.816816002" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/Users/jordanwillis/Git_repos/seqig_standalone/include"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1683795392" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.328446157" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler">
-								<option id="gnu.cpp.compiler.option.include.paths.1195293111" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+								<option id="gnu.cpp.compiler.option.include.paths.1195293111" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/Users/jordanwillis/Git_repos/seqig_standalone/include"/>
-									<listOptionValue builtIn="false" value="/Users/jordanwillis/Downloads/boost_1_57_0"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.15414372" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.1997750919" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker"/>
 							<tool id="cdt.managedbuild.tool.gnu.cross.cpp.linker.1560171999" name="Cross G++ Linker" superClass="cdt.managedbuild.tool.gnu.cross.cpp.linker">
-								<option id="gnu.cpp.link.option.paths.1968598419" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="/Users/jordanwillis/Downloads/boost_1_57_0/stage/lib"/>
+								<option id="gnu.cpp.link.option.paths.1968598419" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
+									<listOptionValue builtIn="false" value="/usr/local/lib"/>
+								</option>
+								<option id="gnu.cpp.link.option.libs.1573017329" superClass="gnu.cpp.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="boost_filesystem"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="boost_system"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.21719577" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -46,9 +49,8 @@
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cross.archiver.1302788889" name="Cross GCC Archiver" superClass="cdt.managedbuild.tool.gnu.cross.archiver"/>
 							<tool id="cdt.managedbuild.tool.gnu.cross.assembler.859438908" name="Cross GCC Assembler" superClass="cdt.managedbuild.tool.gnu.cross.assembler">
-								<option id="gnu.both.asm.option.include.paths.1075692431" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+								<option id="gnu.both.asm.option.include.paths.1075692431" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="/Users/jordanwillis/Git_repos/seqig_standalone/include"/>
-									<listOptionValue builtIn="false" value="/Users/jordanwillis/Downloads/boost_1_57_0"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.2098324739" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
@@ -66,15 +68,6 @@
 		<project id="SeqIg.null.1819813787" name="SeqIg"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="scannerConfiguration">
-		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.macosx.base.1206672969;cdt.managedbuild.toolchain.gnu.macosx.base.1206672969.1854033632;cdt.managedbuild.tool.gnu.c.compiler.macosx.base.708773648;cdt.managedbuild.tool.gnu.c.compiler.input.679824630">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.macosx.base.1206672969;cdt.managedbuild.toolchain.gnu.macosx.base.1206672969.1854033632;cdt.managedbuild.tool.gnu.cpp.compiler.macosx.base.1158027577;cdt.managedbuild.tool.gnu.cpp.compiler.input.2017404693">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
 		<buildTargets>
 			<target name="all" path=".settings" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
@@ -93,4 +86,19 @@
 		</configuration>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.macosx.base.1206672969;cdt.managedbuild.toolchain.gnu.macosx.base.1206672969.1854033632;cdt.managedbuild.tool.gnu.cross.cpp.compiler.328446157;cdt.managedbuild.tool.gnu.cpp.compiler.input.15414372">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.macosx.base.1206672969;cdt.managedbuild.toolchain.gnu.macosx.base.1206672969.1854033632;cdt.managedbuild.tool.gnu.c.compiler.macosx.base.708773648;cdt.managedbuild.tool.gnu.c.compiler.input.679824630">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.macosx.base.1206672969;cdt.managedbuild.toolchain.gnu.macosx.base.1206672969.1854033632;cdt.managedbuild.tool.gnu.cpp.compiler.macosx.base.1158027577;cdt.managedbuild.tool.gnu.cpp.compiler.input.2017404693">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.macosx.base.1206672969;cdt.managedbuild.toolchain.gnu.macosx.base.1206672969.1854033632;cdt.managedbuild.tool.gnu.cross.c.compiler.1413620434;cdt.managedbuild.tool.gnu.c.compiler.input.1683795392">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+	</storageModule>
 </cproject>
