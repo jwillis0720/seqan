@@ -1,3 +1,4 @@
+OBJS = seqig.o
 SRC=../src
 CXXFLAGS+=-I../../../core/include
 CXXFLAGS+=-I../../../extras/include
@@ -6,13 +7,13 @@ CXXFLAGS+=-I../include
 default: all
 all: main
 
-main: main.o
-	$(CXX) $(LDFLAGS) -o main main.o
+main: $(OBJS)
+	$(CXX) $(LDFLAGS) $(OBJS) -o SeqIg
 
-main.o: $(SRC)/main.cpp
-	$(CXX) $(CXXFLAGS) -c -o main.o $(SRC)/main.cpp
+seqig.o: $(SRC)/SeqIg.h $(SRC)/SeqIg.cpp
+	$(CXX) $(CXXFLAGS) -c $(SRC)/SeqIg.cpp 
 
 clean:
-	rm -f main.o main
+	rm -f seqig.o
 
 .PHONY: default all clean

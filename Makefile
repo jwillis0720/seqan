@@ -1,6 +1,6 @@
 default: all
 
-all: debug release
+all: clean debug release
 
 debug:
 	$(MAKE) -C debug
