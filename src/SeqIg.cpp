@@ -74,12 +74,14 @@ inline TSVector Split(const std::string &s, char delim) {
 inline TCMap GetDatabaseFiles(const std::string & db_path, const bool & verbose)
 {
     //You could put any file path in here, e.g. "/home/me/mwah" to list that directory
-    boost::filesystem::path path(db_path);
+    boost::filesystem::path idbpath("db_path");
     boost::filesystem::directory_iterator end_itr;
     TCMap map_of_files;
     
     // cycle through the directory
-    for (boost::filesystem::directory_iterator itr(db_path); itr != end_itr; ++itr)
+    //This used to not segfault!!!
+    //TODO -- Segfaults here
+    for (boost::filesystem::directory_iterator itr(idbpath); itr != end_itr; ++itr)
     {
         // If it's not a directory, list it. If you want to list directories too, just remove this check.
         if (is_regular_file(itr->path()))
