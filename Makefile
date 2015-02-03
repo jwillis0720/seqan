@@ -1,15 +1,20 @@
-default: all
+CPP_FILES := $(wildcard src/*.cpp)
+OBJ_FILES := $(addprefix build/,$(notdir $(CPP_FILES:.cpp=.o)))
+CC_FLAGS += -MMD -Wall
+CC_FLAGS +=-I./include/
+LD_FLAGS += -lboost_filesystem -lboost_system
+-include $(OBJ_FILES:.o=.d)
 
-all: clean debug release
+default: SeqIg
+all: clean SeqIg
 
-debug:
-	$(MAKE) -C debug
+SeqIg: $(OBJ_FILES)
+	g++ $(LD_FLAGS) -o $@ $^
 
-release:
-	$(MAKE) -C release
+build/%.o: src/%.cpp
+	g++ $(CC_FLAGS) -c -o $@ $<
 
-clean:
-	$(MAKE) -C debug clean
-	$(MAKE) -C release clean
-
-.PHONY: default all debug release clean
+clean: 
+	rm -rf build/*.o
+	rm -rf build/*.d
+	rm -rf SeqIg 
