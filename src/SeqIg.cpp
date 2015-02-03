@@ -74,7 +74,7 @@ inline TSVector Split(const std::string &s, char delim) {
 inline TCMap GetDatabaseFiles(const std::string & db_path, const bool & verbose)
 {
     //You could put any file path in here, e.g. "/home/me/mwah" to list that directory
-    boost::filesystem::path idbpath("db_path");
+    boost::filesystem::path idbpath(db_path);
     boost::filesystem::directory_iterator end_itr;
     TCMap map_of_files;
     
